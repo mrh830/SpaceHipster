@@ -1,42 +1,31 @@
-
 SpaceHipster.MainMenu = function (game) {
-
-	this.music = null;
-	this.playButton = null;
 
 };
 
 SpaceHipster.MainMenu.prototype = {
 
-	create: function () {
+    create: function () {
 
-		//	We've already preloaded our assets, so let's kick right into the Main Menu itself.
-		//	Here all we're doing is playing some music and adding a picture and button
-		//	Naturally I expect you to do something significantly better :)
+        this.background = this.add.tileSprite(0, 0, this.game.width, this.game.height, 'space');
 
-		this.music = this.add.audio('titleMusic');
-		this.music.play();
+        this.background.autoScroll(-20, 0);
 
-		this.add.sprite(0, 0, 'titlepage');
+        var text = "Click/tap to begin";
+        var style = {font: "30px Arial", fill: "#fff", align: "center"};
+        var t = this.game.add.text(this.game.width / 2, this.game.height / 2, text, style);
+        t.anchor.setTo(0.5);
 
-		this.playButton = this.add.button(400, 600, 'playButton', this.startGame, this, 'buttonOver', 'buttonOut', 'buttonOver');
+        text = "Highest score: " + this.highestScore;
+        style = {font: "15px Arial", fill: "#fff", align: "center"};
 
-	},
+        var h = this.game.add.text(this.game.width / 2, this.game.height / 2 + 50, text, style);
+        h.anchor.setTo(0.5);
+    },
 
-	update: function () {
+    update: function () {
+        if (this.game.input.activePointer.justPressed()) {
+            this.state.start('Game');
+        }
 
-		//	Do some nice funky main menu effect here
-
-	},
-
-	startGame: function (pointer) {
-
-		//	Ok, the Play Button has been clicked or touched, so let's stop the music (otherwise it'll carry on playing)
-		this.music.stop();
-
-		//	And start the actual game
-		this.state.start('Game');
-
-	}
-
+    }
 };
