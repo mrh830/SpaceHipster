@@ -51,6 +51,8 @@ SpaceHipster.Game.prototype = {
 
         this.generateCollectibles();
         this.generateAsteroids();
+
+        this.showLabels();
     },
 
     update: function () {
@@ -70,6 +72,8 @@ SpaceHipster.Game.prototype = {
 
         this.score++;
 
+        this.scoreLabel.text = this.score;
+
         collectible.destroy();
     },
 
@@ -82,9 +86,10 @@ SpaceHipster.Game.prototype = {
         emitter.maxParticleSpeed.setTo(200, 200);
         emitter.gravity = 0;
         emitter.start(true, 1000, null, 100);
-        this.player.destroy();
 
-        this.game.time.events.add(800, this.gameOver, this);
+        this.player.kill();
+
+        this.game.time.events.add(800, this.quitGame, this);
     },
 
     generateCollectibles: function () {
@@ -123,13 +128,15 @@ SpaceHipster.Game.prototype = {
         }
     },
 
-    quitGame: function (pointer) {
+    showLabels: function () {
+        var text = "0";
+        var style = {font: "20px Arial", fill: "#fff", align: "center"};
+        this.scoreLabel = this.game.add.text(this.game.width - 50, this.game.height - 50, text, style);
+        this.scoreLabel.fixedToCamera = true;
+    },
 
-        //  Here you should destroy anything you no longer need.
-        //  Stop music, delete sprites, purge caches, free resources, all that good stuff.
-
-        //  Then let's go back to the main menu.
-        this.state.start('MainMenu');
+    quitGame: function () {
+        this.state.start('MainMenu', true, false, this.score);
 
     }
 
